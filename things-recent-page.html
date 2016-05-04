@@ -57,7 +57,7 @@
       /**
        * page 전환시 발생하는 event Listener
        */
-      pageChanged: function () {
+      attached: function() {
         document.addEventListener('things-recent-page-add', function(event) {
           var request = event.detail;
           this.addPage(request.pageName, request.routeInfo);
@@ -96,7 +96,7 @@
       routing: function(event) {
         var item = event.model.item;
 
-        page(item.routeInfo);
+        page('/' + item.routeInfo);
       }   
     });
   </script>
