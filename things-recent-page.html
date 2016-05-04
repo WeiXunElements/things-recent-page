@@ -7,7 +7,7 @@
 `<things-recent-page>` Things Recent Page
   Example
     
-    <things-recent-page></things-recent-page>
+    <things-recent-page max-count=20></things-recent-page>
 
 @demo demo/demo-things-recent-page.html
 -->
@@ -42,7 +42,10 @@
          * pageName과 routeInfo
          */
         recentPages: {
-          type: Object
+          type: Array,
+          value: function() {
+            return [];
+          }
         },
 
         /**
@@ -68,15 +71,18 @@
        * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제 
        */
       addPage: function(pageName, routeInfo) {
-        var newItem = {};
-        newItem.pageName = pageName;
-        newItem.routeInfo = routeInfo;
+        var newItem = { pageName : pageName, routeInfo : routeInfo };
+        var alreadyAddedIdx = this.recentPages.map(function(page) { return page.pageName; }).indexOf(pageName);
 
-        if(!this.recentPages) {
-          this.recentPages = [];
-        }
+        // 페이지가 등록되어 있으면 먼저 해당 페이지를 삭제
+        if(alreadyAddedIdx >= 0) {
+          this.splice('recentPages', alreadyAddedIdx, 1);
+        } 
+
+        // 새로운 페이지 등록 
         this.unshift('recentPages', newItem);
 
+        // 총 페이지가 Max Count보다 크다면 맨 마지막 1개 삭제 
         while(this.recentPages.length > this.maxCount) {
           this.splice('recentPages', -1, 1);
         }
@@ -95,9 +101,9 @@
        */
       routing: function(event) {
         var item = event.model.item;
-
         page('/' + item.routeInfo);
-      }   
+      }
+
     });
   </script>
 </dom-module>
