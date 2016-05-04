@@ -51,27 +51,31 @@
         maxCount: {
           type: Number,
           value: 10
-        },
-
-
-        /**
-         * 새로 추가될 pageName, routeInfo
-         */
-        currentPage: {
-          type: Object,
-          observer: '_addPage'
         }
       },
 
       /**
-       * currentPage가 변화하면 실행되는 function
+       * page 전환시 발생하는 event Listener
+       */
+      pageChanged: function () {
+        document.addEventListener('things-recent-page-add', function(event) {
+          var request = event.detail;
+          this.addPage(request.pageName, request.routeInfo);
+        }.bind(this));
+      },
+
+      /**
        * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제 
        */
-      _addPage: function() {
+      addPage: function(pageName, routeInfo) {
+        var newItem = {};
+        newItem.pageName = pageName;
+        newItem.routeInfo = routeInfo;
+
         if(!this.recentPages) {
           this.recentPages = [];
         }
-        this.unshift('recentPages', this.currentPage);
+        this.unshift('recentPages', newItem);
 
         while(this.recentPages.length > this.maxCount) {
           this.splice('recentPages', -1, 1);
