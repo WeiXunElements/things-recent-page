@@ -72,6 +72,7 @@
        */
       addPage: function(pageName, routeInfo) {
         var newItem = { pageName : pageName, routeInfo : routeInfo };
+        if(!this.recentPages.length) this.recentPages = [];
         var alreadyAddedIdx = this.recentPages.map(function(page) { return page.pageName; }).indexOf(pageName);
 
         // 페이지가 등록되어 있으면 먼저 해당 페이지를 삭제
