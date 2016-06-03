@@ -63,7 +63,7 @@
     <label>recent task</label>
     <div>
       <template is="dom-repeat" items="[[recentPages]]">    
-        <paper-item active>
+        <paper-item active="[[itemActive(index)]]">
             <paper-item-body on-tap="routing">[[item.pageName]]</paper-item-body>
             <paper-icon-button icon="icons:cancel" on-tap="deletePage"></paper-icon-button>
         </paper-item>
@@ -117,7 +117,7 @@
        * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제 
        */
       addPage: function(pageName, routeInfo) {
-        var newItem = { pageName : pageName, routeInfo : routeInfo };
+        var newItem = { pageName : pageName, routeInfo : routeInfo, active:true };
         if(!this.recentPages||!this.recentPages.length) this.recentPages = [];
         var alreadyAddedIdx = this.recentPages.map(function(page) { return page.pageName; }).indexOf(pageName);
 
@@ -133,6 +133,9 @@
         while(this.recentPages.length > this.maxCount) {
           this.splice('recentPages', -1, 1);
         }
+
+        // this.disactivePage();
+        // this.activing = newItem;
       },
 
       /**
@@ -149,6 +152,10 @@
       routing: function(event) {
         var item = event.model.item;
         page('/' + item.routeInfo);
+      },
+
+      itemActive: function(index){
+        return index===0;
       }
 
     });
