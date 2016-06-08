@@ -107,9 +107,12 @@
        * page 전환시 발생하는 event Listener
        */
       attached: function() {
-        document.addEventListener('things-recent-page-add', function(event) {
+        document.addEventListener('things-routing-changed', function(event) {
           var request = event.detail;
-          this.addPage(request.pageName, request.routeInfo);
+
+          if(request.category==='STANDARD') 
+            this.addPage(request.pageName, request.routeInfo);
+          
         }.bind(this));
       },
 
