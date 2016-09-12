@@ -14,53 +14,54 @@
 <dom-module id="things-recent-page">
   <template>
     <style>
-    :host{
-      background-color:var(--things-sidebar-background-color);
-      @apply(--layout-vertical);
-      --paper-item-min-height:30px;
-    }
-    div{
-      @apply(--layout-flex);
-      border-left:1px solid var(--things-lightgrey-background-color);
-    }
-    label{
-      background-color:var(--things-primary-background-color);
-      display:block;
-      width:100%;height:45px;
-      border-left:1px solid var(--things-lightgrey-background-color);
-      color:#fff;
-      font-size:12px;
-      text-transform:capitalize;
-      font-weight:300;
-      line-height:45px;
-      text-indent:10px;
-    }
-    paper-item{
-      padding:0 10px;
-      color:var(--things-dark-text-color);
-      font-size:11px;
-      line-height:1.2;
-    }
-    paper-item[active]{
-      color:var(--paper-grey-900);
-      font-weight:700;
-    }
-    paper-item:before{
-      content:"";
-      @apply(--things-dot-lightgrey)
-    }
-    paper-item[active]:before{
-      background-color:var(--things-secondary-background-color);
-    }
-    paper-icon-button{
-      @apply(--things-tiny-icon);
-      opacity:.4;
-      margin-left:3px;
-      min-width:12px;
-    }
+      :host {
+        background-color:var(--things-sidebar-background-color);
+        @apply(--layout-vertical);
+        --paper-item-min-height:30px;
+      }
+      div {
+        @apply(--layout-flex);
+        border-left:1px solid var(--things-lightgrey-background-color);
+      }
+      label {
+        background-color:var(--things-primary-background-color);
+        display:block;
+        width:100%;height:45px;
+        border-left:1px solid var(--things-lightgrey-background-color);
+        color:#fff;
+        font-size:12px;
+        text-transform:capitalize;
+        font-weight:300;
+        line-height:45px;
+        text-indent:10px;
+      }
+      paper-item {
+        padding:0 10px;
+        color:var(--things-dark-text-color);
+        font-size:11px;
+        line-height:1.2;
+      }
+      paper-item[active] {
+        color:var(--paper-grey-900);
+        font-weight:700;
+      }
+      paper-item:before {
+        content:"";
+        @apply(--things-dot-lightgrey)
+      }
+      paper-item[active]:before {
+        background-color:var(--things-secondary-background-color);
+      }
+      paper-icon-button {
+        @apply(--things-tiny-icon);
+        opacity:.4;
+        margin-left:3px;
+        min-width:12px;
+      }
     </style>
     
-    <label>recent task</label>
+    <label><things-i18n-msg msgid="title.recent_page" auto>Recent Page</things-i18n-msg></label>
+
     <div>
       <template is="dom-repeat" items="[[recentPages]]">    
         <paper-item active="[[itemActive(index)]]">
@@ -82,7 +83,6 @@
       is: 'things-recent-page',
 
       properties: {
-
         /**
          * local storage에 저장되는 최근 방문 페이지의 
          * pageName과 routeInfo
@@ -107,12 +107,11 @@
        * page 전환시 발생하는 event Listener
        */
       attached: function() {
-        document.addEventListener('things-routing-changed', function(event) {
-          var request = event.detail;
-
-          if(request.category==='STANDARD') 
-            this.addPage(request.pageName, request.routeInfo);
-          
+        document.addEventListener('things-recent-page-added', function(event) {
+          var routingInfo = event.detail;
+          if(routingInfo.category === 'STANDARD') {
+            this.addPage(routingInfo.pageName, routingInfo.routeInfo);
+          }
         }.bind(this));
       },
 
@@ -120,25 +119,24 @@
        * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제 
        */
       addPage: function(pageName, routeInfo) {
-        var newItem = { pageName : pageName, routeInfo : routeInfo, active:true };
-        if(!this.recentPages||!this.recentPages.length) this.recentPages = [];
+        var newItem = { pageName : pageName, routeInfo : routeInfo, active: true };
+
+        // 1. 페이지가 이미 등록된 것인지 체크 
+        if(!this.recentPages || !this.recentPages.length) this.recentPages = [];
         var alreadyAddedIdx = this.recentPages.map(function(page) { return page.pageName; }).indexOf(pageName);
 
-        // 페이지가 등록되어 있으면 먼저 해당 페이지를 삭제
+        // 2. 페이지가 등록되어 있으면 먼저 해당 페이지를 삭제
         if(alreadyAddedIdx >= 0) {
           this.splice('recentPages', alreadyAddedIdx, 1);
         } 
 
-        // 새로운 페이지 등록 
+        // 3. 새로운 페이지 등록 
         this.unshift('recentPages', newItem);
 
-        // 총 페이지가 Max Count보다 크다면 맨 마지막 1개 삭제 
+        // 4. 총 페이지가 Max Count보다 크다면 맨 마지막 1개 삭제 
         while(this.recentPages.length > this.maxCount) {
           this.splice('recentPages', -1, 1);
         }
-
-        // this.disactivePage();
-        // this.activing = newItem;
       },
 
       /**
@@ -157,10 +155,12 @@
         page('/' + item.routeInfo);
       },
 
-      itemActive: function(index){
-        return index===0;
+      /**
+       * Recent Page 중 active Page이면 true
+       */
+      itemActive: function(index) {
+        return index === 0;
       }
-
     });
   </script>
 </dom-module>
