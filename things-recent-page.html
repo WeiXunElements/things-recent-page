@@ -4,9 +4,9 @@
 <link rel="import" href="../paper-item/paper-item.html">
 
 <!--
-`<things-recent-page>` Things Recent Page
+## Things Recent Page
   Example
-    
+
     <things-recent-page max-count=20></things-recent-page>
 
 @demo demo/index.html
@@ -59,11 +59,11 @@
         min-width:12px;
       }
     </style>
-    
+
     <label><things-i18n-msg msgid="title.recent_page" auto>Recent Page</things-i18n-msg></label>
 
     <div>
-      <template is="dom-repeat" items="[[recentPages]]">    
+      <template is="dom-repeat" items="[[recentPages]]">
         <paper-item active="[[itemActive(index)]]">
             <paper-item-body on-tap="routing">[[item.pageName]]</paper-item-body>
             <paper-icon-button icon="icons:cancel" on-tap="deletePage"></paper-icon-button>
@@ -84,8 +84,10 @@
 
       properties: {
         /**
-         * local storage에 저장되는 최근 방문 페이지의 
+         * local storage에 저장되는 최근 방문 페이지의
          * pageName과 routeInfo
+         * *******
+         * @type {Array}
          */
         recentPages: {
           type: Array,
@@ -96,6 +98,8 @@
 
         /**
          * local storage의 저장 가능한 목록수
+         * *****
+         * @type {Number}
          */
         maxCount: {
           type: Number,
@@ -105,6 +109,8 @@
 
       /**
        * page 전환시 발생하는 event Listener
+       * *******
+       *
        */
       attached: function() {
         document.addEventListener('things-recent-page-added', function(event) {
@@ -116,24 +122,25 @@
       },
 
       /**
-       * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제 
+       * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제
+       * ******
        */
       addPage: function(pageName, routeInfo) {
         var newItem = { pageName : pageName, routeInfo : routeInfo, active: true };
 
-        // 1. 페이지가 이미 등록된 것인지 체크 
+        // 1. 페이지가 이미 등록된 것인지 체크
         if(!this.recentPages || !this.recentPages.length) this.recentPages = [];
         var alreadyAddedIdx = this.recentPages.map(function(page) { return page.pageName; }).indexOf(pageName);
 
         // 2. 페이지가 등록되어 있으면 먼저 해당 페이지를 삭제
         if(alreadyAddedIdx >= 0) {
           this.splice('recentPages', alreadyAddedIdx, 1);
-        } 
+        }
 
-        // 3. 새로운 페이지 등록 
+        // 3. 새로운 페이지 등록
         this.unshift('recentPages', newItem);
 
-        // 4. 총 페이지가 Max Count보다 크다면 맨 마지막 1개 삭제 
+        // 4. 총 페이지가 Max Count보다 크다면 맨 마지막 1개 삭제
         while(this.recentPages.length > this.maxCount) {
           this.splice('recentPages', -1, 1);
         }
@@ -141,6 +148,7 @@
 
       /**
        * 삭제 버튼 클릭시 실행되며 해당 item의 index를 통해 local storage에서 삭제
+       * ******
        */
       deletePage: function(event) {
         var idx = event.model.index;
@@ -149,6 +157,7 @@
 
       /**
        * 화면에 출력된 pageName 클릭시 해당 페이지로 이동
+       * ******
        */
       routing: function(event) {
         var item = event.model.item;
@@ -157,6 +166,7 @@
 
       /**
        * Recent Page 중 active Page이면 true
+       * *******
        */
       itemActive: function(index) {
         return index === 0;
