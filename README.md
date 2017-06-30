@@ -1,6 +1,6 @@
 # things-recent-page
 
-## 방문했던 메뉴를 화면에 보여주는 기능
+## This is a function that displays the visited menu on the screen.
 
 Example:
 
@@ -17,8 +17,7 @@ Example:
 
 ## Dependencies
 
-Element dependencies are managed via [Bower](http://bower.io/). You can
-install that via:
+Element dependencies are managed via [Bower](http://bower.io/). You can install that via:
 
     npm install -g bower
 
