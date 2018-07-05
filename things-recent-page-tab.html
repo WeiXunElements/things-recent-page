@@ -30,6 +30,7 @@
       }
     </style>
     <things-tabs class="colorized" on-tab-remove="deletePage" >
+      <content></content>
       <template is="dom-repeat" items="[[recentPages]]">
         <things-tab model="[[item]]" route-info$="[[item.routeInfo]]" class$="[[item.selected]]" title="[[item.pageName]]" on-tab-taped="routing"></things-tab>
       </template>
