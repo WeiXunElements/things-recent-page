@@ -172,7 +172,7 @@
        */
       deletePage: function(event) {
         var idx = event.detail.index;
-        this.splice('recentPages', idx, 1);
+        this.splice('recentPages', idx-1, 1);
       },
 
       /**
