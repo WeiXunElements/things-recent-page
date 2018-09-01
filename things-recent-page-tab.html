@@ -170,9 +170,28 @@
        * 삭제 버튼 클릭시 실행되며 해당 item의 index를 통해 local storage에서 삭제
        * ******
        */
-      deletePage: function(event) {
+       deletePage: function(event) {
         var idx = event.detail.index;
-        this.splice('recentPages', idx-1, 1);
+        var deletePages = this.splice('recentPages', idx-1, 1);
+        if (deletePages && deletePages.length > 0) {
+            var deletePage = deletePages[0];
+            if (window.location.hash.indexOf(deletePage.routeInfo) != -1) {
+                var pages = this.get('recentPages');
+                if (pages) {
+                    if (pages.length > 0) {
+                        page('/' + pages[0].routeInfo);
+                    } else {
+                        document.querySelector('things-app').currentScreen = {};
+
+                        page('/#!');
+                    }
+                } else {
+                    document.querySelector('things-app').currentScreen = {};
+                    
+                    page('/#!');
+                }
+            }
+        }
       },
 
       /**
