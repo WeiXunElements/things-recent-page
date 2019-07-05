@@ -1,6 +1,6 @@
 {
     "name": "things-recent-page",
-    "version": "v2.2.7",
+    "version": "v2.2.8",
     "authors": [
         "Hatio Lab. <heartyoh@hatiolab.com>"
     ],
@@ -21,7 +21,7 @@
         "polymer": "Polymer/polymer#^1.2.0",
         "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.5",
         "paper-item": "PolymerElements/paper-item#^1.2.1",
-        "l2t-context-menu": "WeiXunElements/l2t-context-menu#^1.0.5"
+        "l2t-context-menu": "WeiXunElements/l2t-context-menu#^1.0.6"
     },
     "devDependencies": {
         "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
