@@ -1,11 +1,11 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html" />
 
-<link rel="import" href="../iron-localstorage/iron-localstorage.html">
-<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../iron-localstorage/iron-localstorage.html" />
+<link rel="import" href="../paper-item/paper-item.html" />
 
 <!--
 ## Things Recent Page
@@ -19,48 +19,49 @@ Copyright © HatioLab Inc. All rights reserved.
   <template>
     <style>
       :host {
-        background-color:var(--things-sidebar-background-color);
-        @apply(--layout-vertical);
-        --paper-item-min-height:30px;
+        background-color: var(--things-sidebar-background-color);
+        @apply (--layout-vertical);
+        --paper-item-min-height: 30px;
       }
       div {
-        @apply(--layout-flex);
-        border-left:1px solid var(--things-lightgrey-background-color);
+        @apply (--layout-flex);
+        border-left: 1px solid var(--things-lightgrey-background-color);
       }
       label {
-        background-color:var(--things-primary-background-color);
-        display:block;
-        width:100%;height:45px;
-        border-left:1px solid var(--things-lightgrey-background-color);
-        color:#fff;
-        font-size:12px;
-        text-transform:capitalize;
-        font-weight:300;
-        line-height:45px;
-        text-indent:10px;
+        background-color: var(--things-primary-background-color);
+        display: block;
+        width: 100%;
+        height: 45px;
+        border-left: 1px solid var(--things-lightgrey-background-color);
+        color: #fff;
+        font-size: 12px;
+        text-transform: capitalize;
+        font-weight: 300;
+        line-height: 45px;
+        text-indent: 10px;
       }
       paper-item {
-        padding:0 10px;
-        color:var(--things-dark-text-color);
-        font-size:11px;
-        line-height:1.2;
+        padding: 0 10px;
+        color: var(--things-dark-text-color);
+        font-size: 11px;
+        line-height: 1.2;
       }
       paper-item[active] {
-        color:var(--paper-grey-900);
-        font-weight:700;
+        color: var(--paper-grey-900);
+        font-weight: 700;
       }
       paper-item:before {
-        content:"";
-        @apply(--things-dot-lightgrey)
+        content: "";
+        @apply (--things-dot-lightgrey);
       }
       paper-item[active]:before {
-        background-color:var(--things-secondary-background-color);
+        background-color: var(--things-secondary-background-color);
       }
       paper-icon-button {
-        @apply(--things-tiny-icon);
-        opacity:.4;
-        margin-left:3px;
-        min-width:12px;
+        @apply (--things-tiny-icon);
+        opacity: 0.4;
+        margin-left: 3px;
+        min-width: 12px;
       }
     </style>
 
@@ -69,22 +70,18 @@ Copyright © HatioLab Inc. All rights reserved.
     <div>
       <template is="dom-repeat" items="[[recentPages]]">
         <paper-item active="[[itemActive(index)]]">
-            <paper-item-body on-tap="routing">[[item.pageName]]</paper-item-body>
-            <paper-icon-button icon="icons:cancel" on-tap="deletePage"></paper-icon-button>
+          <paper-item-body on-tap="routing">[[item.pageName]]</paper-item-body>
+          <paper-icon-button icon="icons:cancel" on-tap="deletePage"></paper-icon-button>
         </paper-item>
       </template>
     </div>
 
-    <iron-localstorage
-      id="local-storage"
-      name="recentPages"
-      value="{{recentPages}}">
-    </iron-localstorage>
+    <iron-localstorage id="local-storage" name="recentPages" value="{{recentPages}}"> </iron-localstorage>
   </template>
 
   <script>
     Polymer({
-      is: 'things-recent-page',
+      is: "things-recent-page",
 
       properties: {
         /**
@@ -95,9 +92,9 @@ Copyright © HatioLab Inc. All rights reserved.
          */
         recentPages: {
           type: Array,
-          value: function() {
+          value: function () {
             return [];
-          }
+          },
         },
 
         /**
@@ -107,8 +104,8 @@ Copyright © HatioLab Inc. All rights reserved.
          */
         maxCount: {
           type: Number,
-          value: 10
-        }
+          value: 10,
+        },
       },
 
       /**
@@ -116,37 +113,44 @@ Copyright © HatioLab Inc. All rights reserved.
        * *******
        *
        */
-      attached: function() {
-        document.addEventListener('things-recent-page-added', function(event) {
-          var routingInfo = event.detail;
-          if(routingInfo.category === 'STANDARD') {
-            this.addPage(routingInfo.pageName, routingInfo.routeInfo);
-          }
-        }.bind(this));
+      attached: function () {
+        document.addEventListener(
+          "things-recent-page-added",
+          function (event) {
+            var routingInfo = event.detail;
+            if (routingInfo.category === "STANDARD") {
+              this.addPage(routingInfo.pageName, routingInfo.routeInfo);
+            }
+          }.bind(this)
+        );
       },
 
       /**
        * 새로 추가된 pageName, routeInfo를 첫번째 index에 추가하고 index값이 maxCount를 넘어서는 것은 삭제
        * ******
        */
-      addPage: function(pageName, routeInfo) {
-        var newItem = { pageName : pageName, routeInfo : routeInfo, active: true };
+      addPage: function (pageName, routeInfo) {
+        var newItem = { pageName: pageName, routeInfo: routeInfo, active: true };
 
         // 1. 페이지가 이미 등록된 것인지 체크
-        if(!this.recentPages || !this.recentPages.length) this.recentPages = [];
-        var alreadyAddedIdx = this.recentPages.map(function(page) { return page.pageName; }).indexOf(pageName);
+        if (!this.recentPages || !this.recentPages.length) this.recentPages = [];
+        var alreadyAddedIdx = this.recentPages
+          .map(function (page) {
+            return page.pageName;
+          })
+          .indexOf(pageName);
 
         // 2. 페이지가 등록되어 있으면 먼저 해당 페이지를 삭제
-        if(alreadyAddedIdx >= 0) {
-          this.splice('recentPages', alreadyAddedIdx, 1);
+        if (alreadyAddedIdx >= 0) {
+          this.splice("recentPages", alreadyAddedIdx, 1);
         }
 
         // 3. 새로운 페이지 등록
-        this.unshift('recentPages', newItem);
+        this.unshift("recentPages", newItem);
 
         // 4. 총 페이지가 Max Count보다 크다면 맨 마지막 1개 삭제
-        while(this.recentPages.length > this.maxCount) {
-          this.splice('recentPages', -1, 1);
+        while (this.recentPages.length > this.maxCount) {
+          this.splice("recentPages", -1, 1);
         }
       },
 
@@ -154,27 +158,27 @@ Copyright © HatioLab Inc. All rights reserved.
        * 삭제 버튼 클릭시 실행되며 해당 item의 index를 통해 local storage에서 삭제
        * ******
        */
-      deletePage: function(event) {
+      deletePage: function (event) {
         var idx = event.model.index;
-        this.splice('recentPages', idx, 1);
+        this.splice("recentPages", idx, 1);
       },
 
       /**
        * 화면에 출력된 pageName 클릭시 해당 페이지로 이동
        * ******
        */
-      routing: function(event) {
+      routing: function (event) {
         var item = event.model.item;
-        page('/' + item.routeInfo);
+        page("/" + item.routeInfo);
       },
 
       /**
        * Recent Page 중 active Page이면 true
        * *******
        */
-      itemActive: function(index) {
+      itemActive: function (index) {
         return index === 0;
-      }
+      },
     });
   </script>
 </dom-module>

@@ -1,8 +1,8 @@
 {
     "name": "things-recent-page",
-    "version": "v2.2.8",
+    "version": "v2.2.9",
     "authors": [
-        "Hatio Lab. <heartyoh@hatiolab.com>"
+        "Shenzhen Weixun"
     ],
     "description": "An element providing List of recent pages",
     "keywords": [
@@ -11,8 +11,6 @@
         "seed"
     ],
     "main": "things-recent-page.html",
-    "license": "http://license.hatiolab.com/EULA",
-    "homepage": "http://elements.hatiolab.com/",
     "ignore": [
         "/.*",
         "/test/"
